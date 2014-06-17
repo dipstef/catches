@@ -22,17 +22,20 @@ catches can invoke a function and handle errors differently.
         if e.message == 'foo':
             raise Exception('No Foo')
         return e.message
-        
+
     >>> execute(raise_value('foo'), catch=(handle(ValueError).doing(no_foo)))
     Exception('No Foo!')
 
 handlers can return values too:
+
 .. code-block:: python
 
     >>> execute(raise_value('bar'), catch=(handle(ValueError).doing(no_foo)))
     'bar'
+
 and base errors are handled:
 .. code-block:: python
+
    >>> execute(raise_value('foo'), catch=(handle(StandardError).doing(no_foo)))
    Exception('No Foo!')
    >>> execute(raise_value('foo'), catch=(handle(Exception).doing(no_foo)))
