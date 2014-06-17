@@ -26,6 +26,7 @@ catches can invoke a function and handle errors differently.
     Exception('No Foo!')
 
 handlers can return values too:
+
 .. code-block:: python
 
     >>> execute(raise_value('bar'), catch=(handle(ValueError).doing(no_foo)))
@@ -76,10 +77,10 @@ Handlers are overridden by highest member in the error class hierarchy
 
    >>> execute(raise_value('bar'), catch=errors.catches)
    Exception('They took the whole bar!')
-   
+
 Base classes to existing catch blocks can be moved right on top:
 
 .. code-block:: python
-    
+
     errors.top(handle(Exception).doing(no_foo))
     assert errors.catches == ((Exception, no_foo), (StandardError, bar_raiser))
