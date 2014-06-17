@@ -1,4 +1,4 @@
-catches
+Catches
 =======
 
 catches is a library that handles dynamically errors.
