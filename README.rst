@@ -32,6 +32,7 @@ handlers can return values too:
     'bar'
 
 and errors are matched to their parent classes:
+
 .. code-block:: python
 
    >>> execute(raise_value('foo'), catch=(handle(StandardError).doing(no_foo)))
@@ -49,7 +50,8 @@ Error handlers are tuples:
     assert handler == ((TypeError, ValueError), no_foo) == ErrorsHandler((TypeError, ValueError), no_foo)
 
     handler = handle(TypeError).doing(no_foo)
-    assert handler == (TypeError, no_foo) == ErrorsHandler((TypeError, ), no_foo) == ErrorHandler(TypeError, no_foo)
+    assert handler == (TypeError, no_foo) == ErrorsHandler((TypeError, ), no_foo) \
+                   == ErrorHandler(TypeError, no_foo)
 
 Handlers are overridden by highest error in the class hierarchy
 
