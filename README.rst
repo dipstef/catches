@@ -7,7 +7,6 @@ Each error class maps to an handler.
 Usage
 -----
 catches can invoke a function and handle errors differently.
-
 .. code-block:: python
 
     from catches import handle, execute
@@ -27,7 +26,6 @@ catches can invoke a function and handle errors differently.
     Exception('No Foo!')
 
 handlers can return values too:
-
 .. code-block:: python
 
     >>> execute(raise_value('bar'), catch=(handle(ValueError).doing(no_foo)))
