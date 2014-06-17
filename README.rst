@@ -7,6 +7,7 @@ Each error class maps to an handler.
 Usage
 -----
 catches can invoke a function and handle errors differently.
+
 .. code-block:: python
 
     from catches import handle, execute
