@@ -53,7 +53,7 @@ Error handlers are tuples:
     assert handler == (TypeError, no_foo) == ErrorsHandler((TypeError, ), no_foo) \
                    == ErrorHandler(TypeError, no_foo)
 
-Handlers are overridden by highest error in the class hierarchy
+Handlers are overridden by highest member in the error class hierarchy
 
 .. code-block:: python
 
@@ -70,7 +70,16 @@ Handlers are overridden by highest error in the class hierarchy
 
    >>> execute(raise_value('bar'), catch=errors.catches)
    'bar'
+
    errors.uncatch(ValueError)
    assert errors.catches == ((StandardError, bar_raiser), )
+
    >>> execute(raise_value('bar'), catch=errors.catches)
    Exception('They took the whole bar!')
+   
+Base classes to existing catch blocks can be moved right on top:
+
+.. code-block:: python
+    
+    errors.top(handle(Exception).doing(no_foo))
+    assert errors.catches == ((Exception, no_foo), (StandardError, bar_raiser))
