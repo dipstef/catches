@@ -3,8 +3,8 @@ Catches
 
 ``catches`` is a library that handles dynamically errors.
 
-Usage
------
+Features
+--------
 ``catches`` can invoke a function and handle errors differently.
 
 It is also used by the ``funlib`` retry decorator , and the ``keepon`` client, which retry executing an http request
