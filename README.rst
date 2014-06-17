@@ -14,20 +14,16 @@ catches can invoke a function and handle errors differently.
     def foo():
         raise Exception('No Foo')
 
-
     def bar():
         raise Exception('bar')
-
 
     def no_foo(e):
         if e.message == 'Foo':
             raise e
         return e.message
 
-Invoking:
-.. code-block:: python
-
     execute(foo, catch=(handle(Exception).doing(no_foo)))
+ 
     Exception('No Foo!')
 
 .. code-block:: python
