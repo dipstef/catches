@@ -11,6 +11,7 @@ catches can invoke a function and handle errors differently.
 .. code-block:: python
 
     from catches import handle, execute
+
     def foo():
         raise Exception('No Foo')
 
@@ -22,8 +23,8 @@ catches can invoke a function and handle errors differently.
             raise e
         return e.message
 
-    execute(foo, catch=(handle(Exception).doing(no_foo)))
- 
+    >>> execute(foo, catch=(handle(Exception).doing(no_foo)))
+
     Exception('No Foo!')
 
 .. code-block:: python
