@@ -6,7 +6,7 @@ Each error class maps to an handler.
 
 Usage
 -----
-catches can invoke a function and handle errors differently. 
+catches can invoke a function and handle errors differently.
 
 .. code-block:: python
 
@@ -25,9 +25,12 @@ catches can invoke a function and handle errors differently.
         return e.message
 
 Invoking:
-    >>> execute(foo, catch=(handle(Exception).doing(no_foo)))
-Exception: No Foo!
+.. code-block:: python
 
-Handler can return also results:
+    execute(foo, catch=(handle(Exception).doing(no_foo)))
+    Exception('No Foo!')
+
+.. code-block:: python
+
     >>> execute(bar, catch=(handle(Exception).doing(no_foo)))
-'bar'
+    'bar'
