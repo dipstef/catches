@@ -40,3 +40,5 @@ settings.update(
     packages= ['catches'],
     test_suite='tests',
 )
+
+setup(**settings)

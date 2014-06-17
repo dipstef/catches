@@ -3,4 +3,5 @@
 .DS_Store
 **@eaDir
 build
-hosts.txt
+dist
+*.egg-info
