@@ -1,12 +1,15 @@
 Catches
 =======
 
-catches is a library that handles dynamically errors.
+``catches`` is a library that handles dynamically errors.
 
 Usage
 -----
-catches can invoke a function and handle errors differently.
+``catches`` can invoke a function and handle errors differently.
+It is also used by ``funlib`` and ``keepon`` to retry executing a flaky function, handling classes of errors.
 
+Examples
+--------
 .. code-block:: python
 
     from catches import handle, execute
@@ -84,3 +87,6 @@ Base classes to existing catch blocks can be moved right on top:
 
     errors.top(handle(Exception).doing(no_foo))
     assert errors.catches == ((Exception, no_foo), (StandardError, bar_raiser))
+
+    >>> execute(raise_value('bar'), catch=errors.catches)
+    'bar'
