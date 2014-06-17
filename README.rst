@@ -24,7 +24,6 @@ catches can invoke a function and handle errors differently.
         return e.message
 
     >>> execute(foo, catch=(handle(Exception).doing(no_foo)))
-
     Exception('No Foo!')
 
 .. code-block:: python
