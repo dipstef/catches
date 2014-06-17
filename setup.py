@@ -36,7 +36,7 @@ settings.update(
     license='Apache 2.0',
     url='https://github.com/dipstef/catches',
     classifiers=CLASSIFIERS,
-    keywords='decorator decorators retry retrying exception exponential backoff',
+    keywords='exceptions exception handling',
     packages= ['catches'],
     test_suite='tests',
 )
