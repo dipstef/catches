@@ -6,6 +6,7 @@ Catches
 Usage
 -----
 ``catches`` can invoke a function and handle errors differently.
+
 It is also used by the ``funlib`` retry decorator , and the ``keepon`` http client, which retries executing an http request
 until completed (or failing after a number of attempts), handling different classes of cases such timeouts or connection errors.
 
