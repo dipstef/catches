@@ -13,13 +13,16 @@ class CatchList(object):
         self.add(*catches)
 
     def add(self, *catches):
-        '''Move catch clauses with lower class hiearchy on top of their base classes.'''
         for catch in catches:
-            existing_catches = _get_existing_catches(catch, self._get_errors_catches(catch.errors))
-            if existing_catches:
-                self._split_existing(_error_or_base_catches(catch, existing_catches))
-            else:
-                self._append(catch)
+            self._add(catch)
+
+    def _add(self, catch):
+        '''Move catch clauses with lower class hiearchy on top of their base classes.'''
+        existing_catches = _get_existing_catches(catch, self._get_errors_catches(catch.errors))
+        if existing_catches:
+            self._split_existing(_error_or_base_catches(catch, existing_catches))
+        else:
+            self._append(catch)
 
     def _append(self, catch):
         self._catches.append(catch)
@@ -27,19 +30,58 @@ class CatchList(object):
             if not error_class in self._errors_catch:
                 self._errors_catch[error_class] = catch
 
-    def top(self, *catches):
-        '''Move catch clauses with higher class hiearchy on top of their sub classes.'''
-        for catch in catches:
-            existing_catches = _get_existing_catches(catch, self._get_subclasses_catches(catch.errors))
-            if existing_catches:
-                self._split_existing(_error_or_subclasses_catches(catch, existing_catches))
-            else:
-                self._append(catch)
+    def top(self, catch):
+        '''Move catch clause with higher class hierarchy on top of existing sub classes catches.'''
+        self._top(catch)
+
+    def override(self, catch):
+        '''As top but removes the overriden/unreachable catch clauses'''
+        self._top(catch)
+        self._remove_overridden(catch.errors)
+
+    def _top(self, catch):
+        existing_catches = _get_existing_catches(catch, self._get_subclasses_catches(catch.errors))
+        if existing_catches:
+            self._split_existing(_error_or_subclasses_catches(catch, existing_catches))
+        else:
+            self._append(catch)
+
+    def _remove_overridden(self, errors):
+        errors = frozenset(errors)
+        for error in errors:
+            catch = self._errors_catch[error]
+            position = self._catches.index(catch)
+            for lower in self._catches[position+1:]:
+                self._remove_overridden_catch(lower, errors)
+
+    def _remove_overridden_catch(self, catch, errors):
+        matching = set([catch_err for error in errors for catch_err in catch.errors if issubclass(catch_err, error)])
+        remaining = [error for error in catch.errors if not error in matching]
+
+        if not remaining:
+            self.remove(catch)
+        elif len(remaining) < len(catch.errors):
+            self._update_catch(catch, remaining)
+            self._remove_errors_catch(catch, matching)
+
+    def _update_catch(self, catch, errors):
+        position = self._catches.index(catch)
+        catch = ErrorsHandler(errors, catch.handler)
+
+        self._catches[position] = catch
+        for error_class in errors:
+            self._errors_catch[error_class] = catch
+
+    def _remove_errors_catch(self, catch, errors):
+        for error_class in errors:
+            error_catch = self._errors_catch[error_class]
+            if error_catch == catch:
+                del self._errors_catch[error_class]
 
     def _get_subclasses_catches(self, errors):
         base_handlers = OrderedDict()
 
-        for error_class in self.classes:
+        for error_class in self.errors:
             catch = self._errors_catch[error_class]
             base_handlers[error_class] = catch
             for base_error in base_errors(error_class):
@@ -90,11 +132,11 @@ class CatchList(object):
     def get(self, error_class):
         return self._errors_catch.get(error_class)
 
-    def remove_error(self, *error_classes):
+    def uncatch(self, *error_classes):
         removed_catches = self._remove_errors_from_catches(error_classes)
         return removed_catches
 
-    def remove_catch(self, *catches):
+    def remove(self, *catches):
         removed = []
         for catch in catches:
             removed += self._remove_errors_from_catches(catch.errors, with_handler=catch.handler)
@@ -131,7 +173,7 @@ class CatchList(object):
                 del self._errors_catch[error_class]
 
     @property
-    def classes(self):
+    def errors(self):
         return tuple(sorted(self._errors_catch.keys(), key=lambda e: self._catches.index(self._errors_catch[e])))
 
     @property

@@ -16,7 +16,7 @@ def _extend_declarations_test():
     assert catches.catches == (((ValueError, TypeError), _one), ((NotImplementedError, StandardError), _one),
                               (Exception, _raise), (BaseException, _raise))
 
-    assert catches.classes == (ValueError, TypeError, NotImplementedError, StandardError, Exception, BaseException)
+    assert catches.errors == (ValueError, TypeError, NotImplementedError, StandardError, Exception, BaseException)
 
     assert catches.handler(NotImplementedError) == _one
     assert catches.handler(StandardError) == _one

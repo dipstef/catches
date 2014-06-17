@@ -14,11 +14,11 @@ class ErrorMatching(object):
         return list(self._matching(error))
 
 
-class ErrorHandle(namedtuple('ErrorHandle', ['error', 'handler']), ErrorMatching):
+class ErrorHandler(namedtuple('ErrorHandler', ['error', 'handler']), ErrorMatching):
 
     def __new__(cls, error, handler):
         assert issubclass(error, BaseException)
-        return super(ErrorHandle, cls).__new__(cls, error, handler)
+        return super(ErrorHandler, cls).__new__(cls, error, handler)
 
     @property
     def errors(self):
@@ -31,7 +31,7 @@ class ErrorsHandler(namedtuple('ErrorHandlers', ['errors', 'handler']), ErrorMat
         if isinstance(errors, type):
             errors = (errors, )
         if len(errors) == 1:
-            return ErrorHandle(errors[0], handler)
+            return ErrorHandler(errors[0], handler)
         else:
             assert all((issubclass(error_class, BaseException) for error_class in errors))
             return super(ErrorsHandler, cls).__new__(cls, tuple(errors), handler)

@@ -26,18 +26,18 @@ class ErrorCatches(CatchList):
             return super(ErrorCatches, self).get(base_errors_catches[0])
 
 
-class ErrorCatchesAppend(ErrorCatches):
+class ErrorCatchesConcatenation(ErrorCatches):
 
     def __init__(self, *catches):
-        super(ErrorCatchesAppend, self).__init__()
+        super(ErrorCatchesConcatenation, self).__init__()
         for errors, handler in catches:
             self.append(ErrorsHandler(errors, handler))
 
     def append(self, catch):
         self._append(catch)
 
-    def remove_catch(self, *catches):
-        removed = super(ErrorCatchesAppend, self).remove_catch(*catches)
+    def remove(self, *catches):
+        removed = super(ErrorCatchesConcatenation, self).remove(*catches)
         errors_removed = [error for catch in removed for error in catch.errors]
         self._map_errors_to_remaining_catches(errors_removed)
         return removed
@@ -58,4 +58,14 @@ class handle(object):
         return ErrorsHandler(self._errors, handler)
 
 catch = ErrorCatches
-append = ErrorCatchesAppend
+concatenate = ErrorCatchesConcatenation
+
+
+def execute(fun, catch=()):
+    catches = concatenate(*catch)
+    try:
+        return fun()
+    except catches.errors, e:
+        error_handler = catches.handler(e.__class__)
+
+        return error_handler(e)
