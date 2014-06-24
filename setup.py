@@ -37,7 +37,7 @@ settings.update(
     url='https://github.com/dipstef/catches',
     classifiers=CLASSIFIERS,
     keywords='exceptions exception handling',
-    packages= ['catches'],
+    packages=['catches'],
     test_suite='tests',
 )
 
