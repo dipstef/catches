@@ -1,5 +1,5 @@
 from .catch_list import CatchList
-from .handler import ErrorsHandler
+from .handler import ErrorsHandler, Catch
 
 
 class ErrorCatches(CatchList):
@@ -13,7 +13,10 @@ class ErrorCatches(CatchList):
 
     def get(self, error_class):
         '''If the exception does not match a catch clause than check for parent classes'''
-        return super(ErrorCatches, self).get(error_class) or self._resolve_from_base_errors(error_class)
+        error_catch = super(ErrorCatches, self).get(error_class)
+        if not error_catch:
+            return self._resolve_from_base_errors(error_class)
+        return Catch(error_class, error_catch)
 
     def handler(self, error_class):
         catch = self.get(error_class)
@@ -23,7 +26,10 @@ class ErrorCatches(CatchList):
     def _resolve_from_base_errors(self, error):
         base_errors_catches = self._base_errors(error)
         if base_errors_catches:
-            return super(ErrorCatches, self).get(base_errors_catches[0])
+            base_catch = base_errors_catches[0]
+            error_catch = super(ErrorCatches, self).get(base_catch)
+            if error_catch:
+                return Catch(base_catch, error_catch)
 
 
 class ErrorCatchesConcatenation(ErrorCatches):

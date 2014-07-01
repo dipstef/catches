@@ -37,5 +37,13 @@ class ErrorsHandler(namedtuple('ErrorHandlers', ['errors', 'handler']), ErrorMat
             return super(ErrorsHandler, cls).__new__(cls, tuple(errors), handler)
 
 
+class Catch(ErrorsHandler):
+
+    def __new__(cls, catch, errors_handler):
+        handler = super(Catch, cls).__new__(cls, errors_handler.errors, errors_handler.handler)
+        handler.catch = catch
+        return handler
+
+
 def base_errors(error_class):
     return (cls for cls in inspect.getmro(error_class) if issubclass(cls, BaseException))

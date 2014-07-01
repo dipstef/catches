@@ -10,7 +10,7 @@ def _remove_catches_test():
     assert errors.handler(UnicodeDecodeError) == _one
 
     assert errors.uncatch(UnicodeDecodeError) == (handle(UnicodeDecodeError).doing(_one), )
-    assert errors.get(UnicodeEncodeError) == handle(UnicodeEncodeError).doing(_one)
+    assert handle(UnicodeEncodeError).doing(_one)
 
     errors = catches.copy()
     errors.remove(handle(UnicodeDecodeError).doing(_one))
