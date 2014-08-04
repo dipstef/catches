@@ -17,7 +17,7 @@ def _remove_catches_test():
     assert errors.handler(UnicodeEncodeError) == _one
 
 
-def _remove_concateneted_catches_test():
+def _remove_concatenated_catches_test():
     catches = concatenate(handle(UnicodeDecodeError, UnicodeEncodeError).doing(_one),
                           handle(UnicodeDecodeError).doing(_raise))
 
@@ -41,7 +41,7 @@ def _remove_concateneted_catches_test():
 
 def main():
     _remove_catches_test()
-    _remove_concateneted_catches_test()
+    _remove_concatenated_catches_test()
 
 if __name__ == '__main__':
     main()
